@@ -148,10 +148,15 @@ module.exports = function(context) {
 
         var first = sourceCode.getFirstToken(node),
             second = sourceCode.getFirstToken(node, 1),
-            penultimate = sourceCode.getLastToken(node, 1),
             last = sourceCode.getLastToken(node),
             firstElement = node.elements[0],
             lastElement = node.elements[node.elements.length - 1];
+
+        while (last.type !== "Punctuation" && last.value !== "]") {
+            last = sourceCode.getTokenBefore(last);
+        }
+
+        var penultimate = sourceCode.getTokenBefore(last);
 
         var openingBracketMustBeSpaced =
             options.objectsInArraysException && isObjectType(firstElement) ||

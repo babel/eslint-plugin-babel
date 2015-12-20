@@ -159,7 +159,14 @@ ruleTester.run("array-bracket-spacing", rule, {
         { code: "var foo = [1, {'bar': 'baz'}, 5];", options: ["never"] },
         { code: "var foo = [{'bar': 'baz'}, 1,  5];", options: ["never"] },
         { code: "var foo = [1, 5, {'bar': 'baz'}];", options: ["never"] },
-        { code: "var obj = {'foo': [1, 2]}", options: ["never"] }
+        { code: "var obj = {'foo': [1, 2]}", options: ["never"] },
+
+        // Babel test cases.
+        // always - destructuring typed array param
+        { code: "function fn([ a,b ]: Array<any>){}", options: ["always"], parser: "babel-eslint", ecmaFeatures: { destructuring: true } },
+
+        // never - destructuring typed array param
+        { code: "function fn([a,b]: Array<any >){}", options: ["never"], parser: "babel-eslint", ecmaFeatures: { destructuring: true } },
 
     ],
 
@@ -667,6 +674,58 @@ ruleTester.run("array-bracket-spacing", rule, {
                     type: "ArrayExpression",
                     line: 1,
                     column: 26
+                }
+            ]
+        },
+
+        // Babel test cases.
+
+        // always - destructuring typed array param
+        {
+            code: "function fn([a,b]: Array<any>){}",
+            output: "function fn([ a,b ]: Array<any>){}",
+            options: ["always"],
+            parser: "babel-eslint",
+            ecmaFeatures: {
+                destructuring: true
+            },
+            errors: [
+                {
+                    message: "A space is required after '['",
+                    type: "ArrayPattern",
+                    line: 1,
+                    column: 13
+                },
+                {
+                    message: "A space is required before ']'",
+                    type: "ArrayPattern",
+                    line: 1,
+                    column: 17
+                }
+            ]
+        },
+
+        // never - destructuring typed array param
+        {
+            code: "function fn([ a,b ]: Array<any>){}",
+            output: "function fn([a,b]: Array<any>){}",
+            options: ["never"],
+            parser: "babel-eslint",
+            ecmaFeatures: {
+                destructuring: true
+            },
+            errors: [
+                {
+                    message: "There should be no space after '['",
+                    type: "ArrayPattern",
+                    line: 1,
+                    column: 13
+                },
+                {
+                    message: "There should be no space before ']'",
+                    type: "ArrayPattern",
+                    line: 1,
+                    column: 19
                 }
             ]
         }
