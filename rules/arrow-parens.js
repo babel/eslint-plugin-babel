@@ -28,7 +28,37 @@ module.exports = function(context) {
                 && node.params[0].type === "Identifier"
                 && node.params[0].typeAnnotation === undefined) {
             if (token.type === "Punctuator" && token.value === "(") {
-                context.report(node, asNeededMessage);
+                context.report({
+                    fix: function(fixer) {
+                        var afterToken = context.getTokenAfter(node.params[0]);
+                        if (afterToken.type !== "Punctuator" || afterToken.value !== ")") {
+                            // If the ending token is not a right parenthesis, this autofix is too
+                            // complex and should not be attempted.
+                            return;
+                        }
+
+                        // Replace the parentheses-wrapped argument with just the argument. For
+                        // example:
+                        //
+                        // ```
+                        // (foo) => true;
+                        // ( bar ) => 5;
+                        // ```
+                        //
+                        // becomes
+                        //
+                        // ```
+                        // foo => true;
+                        // bar => 5;
+                        // ```
+                        return fixer.replaceTextRange(
+                            [token.range[0], afterToken.range[1]],
+                            node.params[0].name
+                        );
+                    },
+                    message: asNeededMessage,
+                    node: node
+                });
             }
             return;
         }
