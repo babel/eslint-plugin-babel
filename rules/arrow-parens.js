@@ -13,6 +13,7 @@ module.exports = function(context) {
     var message = "Expected parentheses around arrow function argument.";
     var asNeededMessage = "Unexpected parentheses around single function argument";
     var asNeeded = context.options[0] === "as-needed";
+    var asNeededPlusBlocks = context.options[0] === "as-needed-plus-blocks";
 
     /**
      * Determines whether a arrow function argument end with `)`
@@ -23,8 +24,15 @@ module.exports = function(context) {
         var token = context.getFirstToken(node);
         if (node.async) token = context.getTokenAfter(token);
 
+        if (asNeededPlusBlocks && node.body.type === 'BlockStatement') {
+          if (token.type !== "Punctuator" || token.value !== "(") {
+            context.report(node, asNeededMessage);
+          }
+          return;
+        }
+
         // as-needed: x => x
-        if (asNeeded && node.params.length === 1
+        if ((asNeeded || asNeededPlusBlocks) && node.params.length === 1
                 && node.params[0].type === "Identifier"
                 && node.params[0].typeAnnotation === undefined) {
             if (token.type === "Punctuator" && token.value === "(") {
@@ -50,6 +58,6 @@ module.exports = function(context) {
 
 module.exports.schema = [
     {
-        "enum": ["always", "as-needed"]
+        "enum": ["always", "as-needed", "as-needed-plus-blocks"]
     }
 ];
