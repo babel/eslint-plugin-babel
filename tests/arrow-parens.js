@@ -48,6 +48,17 @@ var valid = [
     { code: "(a, b) => {}", options: ["as-needed"], ecmaFeatures: { arrowFunctions: true } },
     ok("(a: string) => a", ["as-needed"]),
 
+    // // as-needed-plus-blocks
+    { code: "() => {}", options: ["as-needed-plus-blocks"], ecmaFeatures: { arrowFunctions: true } },
+    { code: "(a) => {\n}", options: ["as-needed-plus-blocks"], ecmaFeatures: { arrowFunctions: true } },
+    { code: "a => a", options: ["as-needed-plus-blocks"], ecmaFeatures: { arrowFunctions: true } },
+    { code: "([a, b]) => {}", options: ["as-needed-plus-blocks"], ecmaFeatures: { arrowFunctions: true, destructuring: true } },
+    { code: "({ a, b }) => {}", options: ["as-needed-plus-blocks"], ecmaFeatures: { arrowFunctions: true, destructuring: true } },
+    { code: "(a = 10) => {}", options: ["as-needed-plus-blocks"], ecmaFeatures: { arrowFunctions: true, destructuring: true, defaultParams: true } },
+    { code: "(...a) => a[0]", options: ["as-needed-plus-blocks"], ecmaFeatures: { arrowFunctions: true, restParams: true } },
+    { code: "(a, b) => {}", options: ["as-needed-plus-blocks"], ecmaFeatures: { arrowFunctions: true } },
+    { code: "(a) => { return true; }", options: ["as-needed-plus-blocks"], ecmaFeatures: { arrowFunctions: true } },
+
     // async
     ok("async () => {}"),
     ok("async (a) => {}"),
@@ -65,6 +76,15 @@ var valid = [
     ok("async (...a) => a[0]", ["as-needed"]),
     ok("async (a, b) => {}", ["as-needed"]),
 
+    ok("async () => {}", ["as-needed-plus-blocks"]),
+    ok("async (a) => {}", ["as-needed-plus-blocks"]),
+    ok("async a => a", ["as-needed-plus-blocks"]),
+    ok("async ([a, b]) => {}", ["as-needed-plus-blocks"]),
+    ok("async ({ a, b }) => {}", ["as-needed-plus-blocks"]),
+    ok("async (a = 10) => {}", ["as-needed-plus-blocks"]),
+    ok("async (...a) => a[0]", ["as-needed-plus-blocks"]),
+    ok("async (a, b) => {}", ["as-needed-plus-blocks"]),
+    ok("async (a) => { return true; }", ["as-needed-plus-blocks"]),
 ];
 
 var message = message;
@@ -157,6 +177,30 @@ var invalid = [
         }]
     },
 
+    // as-needed-plus-blocks
+    {
+        code: "(a) => a",
+        options: ["as-needed-plus-blocks"],
+        ecmaFeatures: { arrowFunctions: true },
+        errors: [{
+            line: 1,
+            column: 1,
+            message: asNeededMessage,
+            type: type
+        }]
+    },
+    {
+        code: "b => { return b; }",
+        options: ["as-needed-plus-blocks"],
+        ecmaFeatures: { arrowFunctions: true },
+        errors: [{
+            line: 1,
+            column: 1,
+            message: asNeededMessage,
+            type: type
+        }]
+    },
+
     // async
     err('async a => {}', [
       { message: 'Expected parentheses around arrow function argument.' },
@@ -169,7 +213,12 @@ var invalid = [
     err('async (a) => a', [
       { message: 'Unexpected parentheses around single function argument' },
     ],
-    ["as-needed"])
+    ["as-needed"]),
+
+    err('async (a) => a', [
+      { message: 'Unexpected parentheses around single function argument' },
+    ],
+    ["as-needed-plus-blocks"])
 ];
 
 ruleTester.run("arrow-parens", rule, {
