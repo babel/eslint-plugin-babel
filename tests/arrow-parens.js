@@ -157,6 +157,24 @@ var invalid = [
         }]
     },
 
+    // Autofix for arrow-parens "as-needed"
+    {
+        code: "(b) => b",
+        options: ["as-needed"],
+        ecmaFeatures: { arrowFunctions: true },
+        errors: [{
+            output: "b => b"
+        }]
+    },
+    {
+        code: "( a ) => 5;",
+        options: ["as-needed"],
+        ecmaFeatures: { arrowFunctions: true },
+        errors: [{
+            output: "a => 5;"
+        }]
+    },
+
     // async
     err('async a => {}', [
       { message: 'Expected parentheses around arrow function argument.' },
