@@ -115,9 +115,8 @@ ruleTester.run('func-params-comma-dangle', rule, {
     {code: 'f = (a:T) => {}', options: ['always-multiline']},
     {code: 'f = (a:T) => {}', options: ['never']},
     {code: 'f = (a:T) => {}', options: ['only-multiline']},
-    // Arrow functions with flow types aren't getting the correct loc.
-    // {code: 'f = (a:T,) => {}', options: ['always']},
-    // {code: 'f = (a:T,\n) => {}', options: ['always']},
+    {code: 'f = (a:T,) => {}', options: ['always']},
+    {code: 'f = (a:T,\n) => {}', options: ['always']},
     {code: 'f = (a:T,\n) => {}', options: ['always-multiline']},
     {code: 'f = (a:T,\n) => {}', options: ['only-multiline']},
     {code: 'f = (a:T\n) => {}', options: ['never']},
@@ -232,14 +231,13 @@ ruleTester.run('func-params-comma-dangle', rule, {
     {code: 'f = (a=1\n) => {}', output: 'f = (a=1,\n) => {}', options: ['always'], errors: MISSING_AP},
     {code: 'f = (a=1\n) => {}', output: 'f = (a=1,\n) => {}', options: ['always-multiline'], errors: MISSING_AP},
 
-    // Arrow functions with flow types aren't getting the correct loc.
-    // {code: 'f = (a:T) => {}', output: 'f = (a:T,) => {}', options: ['always'], errors: MISSING_I},
-    // {code: 'f = (a:T,) => {}', output: 'f = (a:T) => {}', options: ['always-multiline'], errors: UNEXPECTED_I},
-    // {code: 'f = (a:T,) => {}', output: 'f = (a:T) => {}', options: ['only-multiline'], errors: UNEXPECTED_I},
-    // {code: 'f = (a:T,) => {}', output: 'f = (a:T) => {}', options: ['never'], errors: UNEXPECTED_I},
-    // {code: 'f = (a:T,\n) => {}', output: 'f = (a:T\n) => {}', options: ['never'], errors: UNEXPECTED_I},
-    // {code: 'f = (a:T\n) => {}', output: 'f = (a:T,\n) => {}', options: ['always'], errors: MISSING_I},
-    // {code: 'f = (a:T\n) => {}', output: 'f = (a:T,\n) => {}', options: ['always-multiline'], errors: MISSING_I},
+    {code: 'f = (a:T) => {}', output: 'f = (a:T,) => {}', options: ['always'], errors: MISSING_I},
+    {code: 'f = (a:T,) => {}', output: 'f = (a:T) => {}', options: ['always-multiline'], errors: UNEXPECTED_I},
+    {code: 'f = (a:T,) => {}', output: 'f = (a:T) => {}', options: ['only-multiline'], errors: UNEXPECTED_I},
+    {code: 'f = (a:T,) => {}', output: 'f = (a:T) => {}', options: ['never'], errors: UNEXPECTED_I},
+    {code: 'f = (a:T,\n) => {}', output: 'f = (a:T\n) => {}', options: ['never'], errors: UNEXPECTED_I},
+    {code: 'f = (a:T\n) => {}', output: 'f = (a:T,\n) => {}', options: ['always'], errors: MISSING_I},
+    {code: 'f = (a:T\n) => {}', output: 'f = (a:T,\n) => {}', options: ['always-multiline'], errors: MISSING_I},
 
     // CallExpression
     {code: 'f(a)', output: 'f(a,)', options: ['always'], errors: MISSING_I},
