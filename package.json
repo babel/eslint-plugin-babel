@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/babel/eslint-plugin-babel#readme",
   "peerDependencies": {
-    "eslint": ">=1.0.0"
+    "eslint": ">=3.5.0"
   },
   "devDependencies": {
     "babel-eslint": "^6.1.0",
