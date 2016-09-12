@@ -31,12 +31,21 @@ function err(code, output, errors, args){
 var ruleTester = new RuleTester();
 
 var valid = [
+    // "always" (by default)
     { code: "() => {}", ecmaFeatures: { arrowFunctions: true } },
     { code: "(a) => {}", ecmaFeatures: { arrowFunctions: true } },
     { code: "(a) => a", ecmaFeatures: { arrowFunctions: true } },
     { code: "(a) => {\n}", ecmaFeatures: { arrowFunctions: true } },
     { code: "a.then((foo) => {});", ecmaFeatures: { arrowFunctions: true } },
     { code: "a.then((foo) => { if (true) {}; });", ecmaFeatures: { arrowFunctions: true } },
+
+    // "always" (explicit)
+    { code: "() => {}", options: ["always"], ecmaFeatures: { arrowFunctions: true } },
+    { code: "(a) => {}", options: ["always"], ecmaFeatures: { arrowFunctions: true } },
+    { code: "(a) => a", options: ["always"], ecmaFeatures: { arrowFunctions: true } },
+    { code: "(a) => {\n}", options: ["always"], ecmaFeatures: { arrowFunctions: true } },
+    { code: "a.then((foo) => {});", options: ["always"], ecmaFeatures: { arrowFunctions: true } },
+    { code: "a.then((foo) => { if (true) {}; });", options: ["always"], ecmaFeatures: { arrowFunctions: true } },
 
     // // as-needed
     { code: "() => {}", options: ["as-needed"], ecmaFeatures: { arrowFunctions: true } },
@@ -49,6 +58,18 @@ var valid = [
     { code: "(a, b) => {}", options: ["as-needed"], ecmaFeatures: { arrowFunctions: true } },
     ok("(a: string) => a", ["as-needed"]),
 
+    // "as-needed", { "requireForBlockBody": true }
+    { code: "() => {}", options: ["as-needed", { requireForBlockBody: true }], ecmaFeatures: { arrowFunctions: true } },
+    { code: "a => a", options: ["as-needed", { requireForBlockBody: true }], ecmaFeatures: { arrowFunctions: true } },
+    { code: "([a, b]) => {}", options: ["as-needed", { requireForBlockBody: true }], ecmaFeatures: { arrowFunctions: true } },
+    { code: "([a, b]) => a", options: ["as-needed", { requireForBlockBody: true }], ecmaFeatures: { arrowFunctions: true } },
+    { code: "({ a, b }) => {}", options: ["as-needed", { requireForBlockBody: true }], ecmaFeatures: { arrowFunctions: true } },
+    { code: "({ a, b }) => a + b", options: ["as-needed", { requireForBlockBody: true }], ecmaFeatures: { arrowFunctions: true } },
+    { code: "(a = 10) => {}", options: ["as-needed", { requireForBlockBody: true }], ecmaFeatures: { arrowFunctions: true } },
+    { code: "(...a) => a[0]", options: ["as-needed", { requireForBlockBody: true }], ecmaFeatures: { arrowFunctions: true } },
+    { code: "(a, b) => {}", options: ["as-needed", { requireForBlockBody: true }], ecmaFeatures: { arrowFunctions: true } },
+    { code: "a => ({})", options: ["as-needed", { requireForBlockBody: true }], ecmaFeatures: { arrowFunctions: true } },
+
     // async
     ok("async () => {}"),
     ok("async (a) => {}"),
@@ -56,6 +77,13 @@ var valid = [
     ok("async (a) => {\n}"),
     ok("a.then(async (foo) => {});"),
     ok("a.then((foo) => { if (true) {}; })"),
+
+    ok("async () => {}", ["always"]),
+    ok("async (a) => {}", ["always"]),
+    ok("async (a) => a", ["always"]),
+    ok("async (a) => {\n}", ["always"]),
+    ok("a.then(async (foo) => {});", ["always"]),
+    ok("a.then((foo) => { if (true) {}; })", ["always"]),
 
     ok("async () => {}", ["as-needed"]),
     ok("async a => {}", ["as-needed"]),
@@ -66,13 +94,28 @@ var valid = [
     ok("async (...a) => a[0]", ["as-needed"]),
     ok("async (a, b) => {}", ["as-needed"]),
 
+    ok("async () => {}", ["as-needed", { requireForBlockBody: true }]),
+    ok("async a => a", ["as-needed", { requireForBlockBody: true }]),
+    ok("async ([a, b]) => {}", ["as-needed", { requireForBlockBody: true }]),
+    ok("async ([a, b]) => a", ["as-needed", { requireForBlockBody: true }]),
+    ok("async ({ a, b }) => {}", ["as-needed", { requireForBlockBody: true }]),
+    ok("async ({ a, b }) => a + b", ["as-needed", { requireForBlockBody: true }]),
+    ok("async (a = 10) => {}", ["as-needed", { requireForBlockBody: true }]),
+    ok("async (...a) => a[0]", ["as-needed", { requireForBlockBody: true }]),
+    ok("async (a, b) => {}", ["as-needed", { requireForBlockBody: true }]),
+    ok("async a => ({})", ["as-needed", { requireForBlockBody: true }]),
+
 ];
 
 var message = message;
 var asNeededMessage = asNeededMessage;
+var requireForBlockBodyMessage = requireForBlockBodyMessage;
+var requireForBlockBodyNoParensMessage = requireForBlockBodyNoParensMessage;
 var type = type;
 
 var invalid = [
+
+    // "always" (by default)
     {
         code: "a => {}",
         output: "(a) => {}",
@@ -140,7 +183,7 @@ var invalid = [
         }]
     },
 
-    // as-needed
+    // "as-needed"
     {
         code: "(a) => a",
         output: "a => a",
@@ -166,6 +209,32 @@ var invalid = [
         }]
     },
 
+    // "as-needed", { "requireForBlockBody": true }
+    {
+        code: "a => {}",
+        output: "(a) => {}",
+        options: ["as-needed", { requireForBlockBody: true }],
+        ecmaFeatures: { arrowFunctions: true },
+        errors: [{
+            line: 1,
+            column: 1,
+            message: requireForBlockBodyNoParensMessage,
+            type: type
+        }]
+    },
+    {
+        code: "(a) => a",
+        output: "a => a",
+        options: ["as-needed", { requireForBlockBody: true }],
+        ecmaFeatures: { arrowFunctions: true },
+        errors: [{
+            line: 1,
+            column: 1,
+            message: requireForBlockBodyMessage,
+            type: type
+        }]
+    },
+
     // async
     err('async a => {}', 'async (a) => {}', [
       { message: 'Expected parentheses around arrow function argument.' },
@@ -178,7 +247,17 @@ var invalid = [
     err('async (a) => a', 'async a => a', [
       { message: 'Unexpected parentheses around single function argument' },
     ],
-    ["as-needed"])
+    ["as-needed"]),
+
+    err('async a => {}', 'async (a) => {}', [
+      { message: 'Expected parentheses around arrow function argument having a body with curly braces.' }
+    ],
+    ["as-needed", { requireForBlockBody: true }]),
+
+    err('async (a) => a', 'async a => a', [
+      { message: 'Unexpected parentheses around single function argument having a body with no curly braces' }
+    ],
+    ["as-needed", { requireForBlockBody: true }]),
 ];
 
 ruleTester.run("arrow-parens", rule, {
