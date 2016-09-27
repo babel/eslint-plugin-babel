@@ -27,7 +27,7 @@
     "eslint": ">=1.0.0"
   },
   "devDependencies": {
-    "babel-eslint": "^6.1.0",
+    "babel-eslint": "^7.0.0",
     "eslint": "^3.0.0",
     "mocha": "^3.0.0"
   }
