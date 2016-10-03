@@ -26,7 +26,8 @@ module.exports = function(context) {
         // as-needed: x => x
         if (asNeeded && node.params.length === 1
                 && node.params[0].type === "Identifier"
-                && node.params[0].typeAnnotation === undefined) {
+                && node.params[0].typeAnnotation === undefined
+                && (node.returnType && node.returnType.typeAnnotation) === undefined) {
             if (token.type === "Punctuator" && token.value === "(") {
                 context.report({
                     node: node,
