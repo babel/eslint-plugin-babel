@@ -9,7 +9,7 @@
 // Requirements
 //------------------------------------------------------------------------------
 
-const lodash = require("lodash");
+const cloneDeep = require("lodash.clonedeep");
 const rule = require("../../rules/no-invalid-this");
 const RuleTester = require("../RuleTester");
 
@@ -68,7 +68,7 @@ function extractPatterns(patterns, type) {
     // Clone and apply the pattern environment.
     const patternsList = patterns.map(function(pattern) {
         return pattern[type].map(function(applyCondition) {
-            const thisPattern = lodash.cloneDeep(pattern);
+            const thisPattern = cloneDeep(pattern);
 
             applyCondition(thisPattern);
 
@@ -581,6 +581,23 @@ const patterns = [
         errors,
         valid: [NORMAL],
         invalid: [USE_STRICT, IMPLIED_STRICT, MODULES]
+    },
+
+    // babel/no-invalid-this
+
+    // Class Instance Properties.
+    {
+        code: "class A {a = this.b;};",
+        parserOptions: { ecmaVersion: 6 },
+        valid: [NORMAL, USE_STRICT, IMPLIED_STRICT, MODULES],
+        invalid: []
+    },
+
+    {
+        code: "class A {a = () => {return this.b;};};",
+        parserOptions: { ecmaVersion: 6 },
+        valid: [NORMAL, USE_STRICT, IMPLIED_STRICT, MODULES],
+        invalid: []
     },
 ];
 

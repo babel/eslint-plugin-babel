@@ -30,6 +30,8 @@ module.exports = {
         const stack = [],
             sourceCode = context.getSourceCode();
 
+        let insideClassProperty = false;
+
         /**
          * Gets the current checking context.
          *
@@ -50,6 +52,23 @@ module.exports = {
             }
             return current;
         };
+
+        /**
+         * `this` should be fair game anywhere inside a class property.
+         *
+         * @returns {void}
+         */
+        function enterClassProperty() {
+            insideClassProperty = true;
+        }
+
+        /**
+         * Back to the normal check.
+         * @returns {void}
+         */
+        function exitClassProperty() {
+            insideClassProperty = false;
+        }
 
         /**
          * Pushs new checking context into the stack.
@@ -104,6 +123,8 @@ module.exports = {
                 stack.pop();
             },
 
+            ClassProperty: enterClassProperty,
+            "ClassProperty:exit": exitClassProperty,
             FunctionDeclaration: enterFunction,
             "FunctionDeclaration:exit": exitFunction,
             FunctionExpression: enterFunction,
@@ -113,7 +134,7 @@ module.exports = {
             ThisExpression(node) {
                 const current = stack.getCurrent();
 
-                if (current && !current.valid) {
+                if (!insideClassProperty && current && !current.valid) {
                     context.report(node, "Unexpected 'this'.");
                 }
             }

@@ -9,8 +9,6 @@
 // Requirements
 //------------------------------------------------------------------------------
 
-const esutils = require("esutils");
-
 //------------------------------------------------------------------------------
 // Helpers
 //------------------------------------------------------------------------------
@@ -302,19 +300,6 @@ module.exports = {
             )
         );
     },
-
-    /**
-     * Gets the trailing statement of a given node.
-     *
-     *     if (code)
-     *         consequent;
-     *
-     * When taking this `IfStatement`, returns `consequent;` statement.
-     *
-     * @param {ASTNode} A node to get.
-     * @returns {ASTNode|null} The trailing statement's node.
-     */
-    getTrailingStatement: esutils.ast.trailingStatement,
 
     /**
      * Finds the variable by a given name in a given scope and its upper scopes.
