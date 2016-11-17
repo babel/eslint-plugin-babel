@@ -48,15 +48,12 @@ The following rules are not in `eslint`, but are relevant only to syntax that is
 the current JavaScript standard or supported by `eslint`.
 
 - `babel/no-await-in-loop`: guard against awaiting async functions inside of a loop
-- `babel/flow-object-type`: Require a particular separator between properties in Flow object types. (🛠 )
-  - Use the option `semicolon` to require semicolons (e.g. `type Foo = { bar: number; baz: string }`).
-  - Use the option `comma` to require commas (e.g. `type Foo = { bar: number, baz: string }`).
-
 
 #### Deprecated
 
-- `babel/generator-star-spacing`: Handles async/await functions correctly
-- `babel/object-shorthand`: doesn't fail when using object spread (`...obj`)
-- `babel/arrow-parens`: Handles async functions correctly (🛠 )
-- `babel/func-params-comma-dangle`: Require or forbid trailing commas for function paramater lists. Behaves like, and takes the same options as, `eslint`'s [`comma-dangle`](http://eslint.org/docs/rules/comma-dangle). (🛠 )
-- `babel/array-bracket-spacing`: Handles destructuring arrays with flow type in function parameters (🛠 )
+- `babel/generator-star-spacing`: Use [`generator-star-spacing`](http://eslint.org/docs/rules/generator-star-spacing).
+- `babel/object-shorthand`: Use [`object-shorthand`](http://eslint.org/docs/rules/object-shorthand).
+- `babel/arrow-parens`: Use [`arrow-parens`](http://eslint.org/docs/rules/arrow-parens).
+- `babel/func-params-comma-dangle`: Use [`comma-dangle`](http://eslint.org/docs/rules/comma-dangle).
+- `babel/array-bracket-spacing`: Use [`array-bracket-spacing`](http://eslint.org/docs/rules/array-bracket-spacing).
+- `babel/flow-object-type`: Use [`flowtype/object-type-delimiter`](https://github.com/gajus/eslint-plugin-flowtype#eslint-plugin-flowtype-rules-object-type-delimiter).
