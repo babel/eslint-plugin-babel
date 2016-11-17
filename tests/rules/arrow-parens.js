@@ -48,6 +48,8 @@ var valid = [
     { code: "(...a) => a[0]", options: ["as-needed"], ecmaFeatures: { arrowFunctions: true, restParams: true } },
     { code: "(a, b) => {}", options: ["as-needed"], ecmaFeatures: { arrowFunctions: true } },
     ok("(a: string) => a", ["as-needed"]),
+    ok("(a: string): string => a", ["as-needed"]),
+    ok("(a): string => a", ["as-needed"]),
 
     // async
     ok("async () => {}"),
