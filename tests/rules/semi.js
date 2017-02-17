@@ -97,7 +97,15 @@ ruleTester.run("semi", rule, {
 
         // https://github.com/eslint/eslint/issues/7782
         { code: "var a = b;\n/foo/.test(c)", options: ["never"] },
-        { code: "var a = b;\n`foo`", options: ["never"], parserOptions: { ecmaVersion: 6 } }
+        { code: "var a = b;\n`foo`", options: ["never"], parserOptions: { ecmaVersion: 6 } },
+
+        // babel
+        "class Foo { bar = 'example'; }",
+        "class Foo { static bar = 'example'; }",
+
+        // babel, "never"
+        { code: "class Foo { bar = 'example' }", options: ["never"] },
+        { code: "class Foo { static bar = 'example' }", options: ["never"] }
     ],
     invalid: [
         { code: "import * as utils from './utils'", output: "import * as utils from './utils';", parserOptions: { sourceType: "module" }, errors: [{ message: "Missing semicolon.", type: "ImportDeclaration", column: 33 }] },
@@ -170,6 +178,14 @@ ruleTester.run("semi", rule, {
         { code: "export default (foo) => foo.bar();", output: "export default (foo) => foo.bar()", options: ["never"], parserOptions: { sourceType: "module" }, errors: [{ message: "Extra semicolon.", type: "ExportDefaultDeclaration" }] },
         { code: "export default foo = 42;", output: "export default foo = 42", options: ["never"], parserOptions: { sourceType: "module" }, errors: [{ message: "Extra semicolon.", type: "ExportDefaultDeclaration" }] },
         { code: "export default foo += 42;", output: "export default foo += 42", options: ["never"], parserOptions: { sourceType: "module" }, errors: [{ message: "Extra semicolon.", type: "ExportDefaultDeclaration" }] },
-        { code: "a;\n++b", output: "a\n++b", options: ["never"], errors: [{ message: "Extra semicolon." }] }
+        { code: "a;\n++b", output: "a\n++b", options: ["never"], errors: [{ message: "Extra semicolon." }] },
+
+        // babel
+        { code: "class Foo { bar = 'example' }", errors: [{ message: "Missing semicolon." }] },
+        { code: "class Foo { static bar = 'example' }", errors: [{ message: "Missing semicolon." }] },
+
+        // babel, "never"
+        { code: "class Foo { bar = 'example'; }", options: ["never"], errors: [{ message: "Extra semicolon." }] },
+        { code: "class Foo { static bar = 'example'; }", options: ["never"], errors: [{ message: "Extra semicolon." }] }
     ]
 });

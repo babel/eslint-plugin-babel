@@ -208,6 +208,7 @@ module.exports = {
             ContinueStatement: checkForSemicolon,
             ImportDeclaration: checkForSemicolon,
             ExportAllDeclaration: checkForSemicolon,
+            ClassProperty: checkForSemicolon,
             ExportNamedDeclaration(node) {
                 if (!node.declaration) {
                     checkForSemicolon(node);
