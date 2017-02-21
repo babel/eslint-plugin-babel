@@ -12,6 +12,8 @@ module.exports = {
     'flow-object-type': require('./rules/flow-object-type'),
     'func-params-comma-dangle': require('./rules/func-params-comma-dangle'),
     'no-invalid-this': require('./rules/no-invalid-this'),
+    'require-jsdoc': require('./rules/require-jsdoc'),
+    'valid-jsdoc': require('./rules/valid-jsdoc'),
   },
   rulesConfig: {
     'generator-star-spacing': 0,
@@ -24,5 +26,7 @@ module.exports = {
     'flow-object-type': 0,
     'func-params-comma-dangle': 0,
     'no-invalid-this': 0,
+    'require-jsdoc': 0,
+    'valid-jsdoc': 0,
   }
 };

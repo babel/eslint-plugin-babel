@@ -723,5 +723,27 @@ module.exports = {
      */
     isDecimalInteger(node) {
         return node.type === "Literal" && typeof node.value === "number" && /^(0|[1-9]\d*)$/.test(node.raw);
+    },
+
+    /**
+     * WARNING - code copy-pasted from eslint core
+     * Finds a JSDoc comment node in an array of comment nodes.
+     * @param {ASTNode[]} comments The array of comment nodes to search.
+     * @param {int} line Line number to look around
+     * @returns {ASTNode} The node if found, null if not.
+     * @private
+     */
+    findJSDocComment(comments, line) {
+        if (comments) {
+            for (let i = comments.length - 1; i >= 0; i--) {
+                if (comments[i].type === "Block" && comments[i].value.charAt(0) === "*") {
+                    if (line - comments[i].loc.end.line <= 1) {
+                        return comments[i];
+                    }
+                    break;
+                }
+            }
+        }
+        return null;
     }
 };
