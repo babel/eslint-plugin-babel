@@ -39,12 +39,12 @@ original ones as well!).
 
 Each rule corresponds to a core `eslint` rule, and has the same options.
 
-🛠 : means it's autofixable with `--fix`.
+🛠: means it's autofixable with `--fix`.
 
 - `babel/new-cap`: Ignores capitalized decorators (`@Decorator`)
-- `babel/object-curly-spacing`: doesn't complain about `export x from "mod";` or `export * as x from "mod";` (🛠 )
+- `babel/object-curly-spacing`: doesn't complain about `export x from "mod";` or `export * as x from "mod";` (🛠)
 - `babel/no-invalid-this`: doesn't fail when inside class properties (`class A { a = this.b; }`)
-- `babel/semi`: Includes class properties (🛠 )
+- `babel/semi`: Includes class properties (🛠)
 
 #### Deprecated
 
