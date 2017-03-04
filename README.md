@@ -30,8 +30,6 @@ original ones as well!).
   "rules": {
     "babel/new-cap": 1,
     "babel/object-curly-spacing": 1,
-    "babel/no-await-in-loop": 1,
-    "babel/flow-object-type": 1,
     "babel/no-invalid-this": 1,
     "babel/semi": 1
   }
@@ -48,11 +46,6 @@ Each rule corresponds to a core `eslint` rule, and has the same options.
 - `babel/no-invalid-this`: doesn't fail when inside class properties (`class A { a = this.b; }`)
 - `babel/semi`: Includes class properties (🛠 )
 
-The following rules are not in `eslint`, but are relevant only to syntax that is not specified by
-the current JavaScript standard or supported by `eslint`.
-
-- `babel/no-await-in-loop`: guard against awaiting async functions inside of a loop
-
 #### Deprecated
 
 - `babel/generator-star-spacing`: Use [`generator-star-spacing`](http://eslint.org/docs/rules/generator-star-spacing).
@@ -61,3 +54,4 @@ the current JavaScript standard or supported by `eslint`.
 - `babel/func-params-comma-dangle`: Use [`comma-dangle`](http://eslint.org/docs/rules/comma-dangle).
 - `babel/array-bracket-spacing`: Use [`array-bracket-spacing`](http://eslint.org/docs/rules/array-bracket-spacing).
 - `babel/flow-object-type`: Use [`flowtype/object-type-delimiter`](https://github.com/gajus/eslint-plugin-flowtype#eslint-plugin-flowtype-rules-object-type-delimiter).
+- `babel/no-await-in-loop`: Use [`no-await-in-loop`](http://eslint.org/docs/rules/no-await-in-loop).
