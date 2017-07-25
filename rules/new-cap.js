@@ -71,6 +71,7 @@ module.exports = function(context) {
     var config = context.options[0] || {};
     var NEW_IS_CAP = config.newIsCap !== false;
     var CAP_IS_NEW = config.capIsNew !== false;
+    var skipProperties = config.properties === false;
 
     var newIsCapExceptions = checkArray(config, "newIsCapExceptions", []).reduce(invert, {});
 
@@ -153,7 +154,8 @@ module.exports = function(context) {
             return node.callee.object.type === "Identifier" &&
                 node.callee.object.name === "Date";
         }
-        return false;
+
+        return skipProperties && node.callee.type === "MemberExpression";
     }
 
     /**
@@ -228,6 +230,9 @@ module.exports.schema = [
                 "items": {
                     "type": "string"
                 }
+            },
+            "properties": {
+                "type": "boolean"
             }
         },
         "additionalProperties": false
