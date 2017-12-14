@@ -45,6 +45,7 @@ Each rule corresponds to a core `eslint` rule, and has the same options.
 - `babel/object-curly-spacing`: doesn't complain about `export x from "mod";` or `export * as x from "mod";` (🛠)
 - `babel/no-invalid-this`: doesn't fail when inside class properties (`class A { a = this.b; }`)
 - `babel/semi`: doesn't fail when using `for await (let something of {})`. Includes class properties (🛠)
+- `babel/no-shadow-restricted-names`: doesn't fail on optional catch binding `try {} catch {}`
 
 #### Deprecated
 

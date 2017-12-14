@@ -13,6 +13,7 @@ module.exports = {
     'func-params-comma-dangle': require('./rules/func-params-comma-dangle'),
     'no-invalid-this': require('./rules/no-invalid-this'),
     'semi': require('./rules/semi'),
+    'no-shadow-restricted-names': require('./rules/no-shadow-restricted-names'),
   },
   rulesConfig: {
     'generator-star-spacing': 0,
@@ -26,5 +27,6 @@ module.exports = {
     'func-params-comma-dangle': 0,
     'no-invalid-this': 0,
     'semi': 0,
+    'no-shadow-restricted-names': 0,
   }
 };
