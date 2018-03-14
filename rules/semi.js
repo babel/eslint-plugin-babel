@@ -5,54 +5,27 @@
 "use strict";
 
 //------------------------------------------------------------------------------
+// Requirements
+//------------------------------------------------------------------------------
+
+const ruleComposer = require("eslint-rule-composer");
+const eslint = require("eslint");
+const semiRule = eslint.linter.getRules().get("semi");
+
+//------------------------------------------------------------------------------
 // Rule Definition
 //------------------------------------------------------------------------------
 
-module.exports = {
-    meta: {
-        docs: {
-            description: "require or disallow semicolons instead of ASI",
-            category: "Stylistic Issues",
-            recommended: false
-        },
-
-        fixable: "code",
-
-        schema: {
-            anyOf: [
-                {
-                    type: "array",
-                    items: [
-                        {
-                            enum: ["never"]
-                        }
-                    ],
-                    minItems: 0,
-                    maxItems: 1
-                },
-                {
-                    type: "array",
-                    items: [
-                        {
-                            enum: ["always"]
-                        },
-                        {
-                            type: "object",
-                            properties: {
-                                omitLastInOneLineBlock: { type: "boolean" }
-                            },
-                            additionalProperties: false
-                        }
-                    ],
-                    minItems: 0,
-                    maxItems: 2
-                }
-            ]
-        }
-    },
-
-    create(context) {
-
+const filterSemiRule = ruleComposer.filterReports(semiRule, problem => {
+    // VariableDeclaraction nodes use a modified checkForSemicolonForVariableDeclaration
+    if (problem.node.type === "VariableDeclaration") {
+        return false;
+    }
+    return true;
+});
+module.exports = ruleComposer.joinReports([
+    filterSemiRule,
+    context => {
         const OPT_OUT_PATTERN = /^[-[(/+`]/; // One of [(/+-`
         const options = context.options[1];
         const never = context.options[0] === "never",
@@ -78,13 +51,13 @@ module.exports = {
             if (!missing) {
                 message = "Missing semicolon.";
                 loc = loc.end;
-                fix = function(fixer) {
+                fix = function (fixer) {
                     return fixer.insertTextAfter(lastToken, ";");
                 };
             } else {
                 message = "Extra semicolon.";
                 loc = loc.start;
-                fix = function(fixer) {
+                fix = function (fixer) {
                     return fixer.remove(lastToken);
                 };
             }
@@ -95,7 +68,6 @@ module.exports = {
                 message,
                 fix
             });
-
         }
 
         /**
@@ -104,7 +76,7 @@ module.exports = {
          * @returns {boolean} True if token is a semicolon punctuator.
          */
         function isSemicolon(token) {
-            return (token.type === "Punctuator" && token.value === ";");
+            return token.type === "Punctuator" && token.value === ";";
         }
 
         /**
@@ -127,8 +99,11 @@ module.exports = {
 
             const lastTokenLine = lastToken.loc.end.line;
             const nextTokenLine = nextToken.loc.start.line;
-            const isOptOutToken = OPT_OUT_PATTERN.test(nextToken.value) && nextToken.value !== "++" && nextToken.value !== "--";
-            const isDivider = (nextToken.value === "}" || nextToken.value === ";");
+            const isOptOutToken =
+                OPT_OUT_PATTERN.test(nextToken.value) &&
+                nextToken.value !== "++" &&
+                nextToken.value !== "--";
+            const isDivider = nextToken.value === "}" || nextToken.value === ";";
 
             return (lastTokenLine !== nextTokenLine && !isOptOutToken) || isDivider;
         }
@@ -147,8 +122,11 @@ module.exports = {
 
             const parent = node.parent;
 
-            return parent && parent.type === "BlockStatement" &&
-              parent.loc.start.line === parent.loc.end.line;
+            return (
+                parent &&
+                parent.type === "BlockStatement" &&
+                parent.loc.start.line === parent.loc.end.line
+            );
         }
 
         /**
@@ -186,8 +164,10 @@ module.exports = {
                 parentIndex = ancestors.length - 1,
                 parent = ancestors[parentIndex];
 
-            if ((parent.type !== "ForStatement" || parent.init !== node) &&
-                (!/^For(?:In|Of|Await)Statement/.test(parent.type) || parent.left !== node)
+            if (
+                (parent.type !== "ForStatement" || parent.init !== node) &&
+                (!/^For(?:In|Of|Await)Statement/.test(parent.type) ||
+                    parent.left !== node)
             ) {
                 checkForSemicolon(node);
             }
@@ -199,27 +179,7 @@ module.exports = {
 
         return {
             VariableDeclaration: checkForSemicolonForVariableDeclaration,
-            ExpressionStatement: checkForSemicolon,
-            ReturnStatement: checkForSemicolon,
-            ThrowStatement: checkForSemicolon,
-            DoWhileStatement: checkForSemicolon,
-            DebuggerStatement: checkForSemicolon,
-            BreakStatement: checkForSemicolon,
-            ContinueStatement: checkForSemicolon,
-            ImportDeclaration: checkForSemicolon,
-            ExportAllDeclaration: checkForSemicolon,
-            ClassProperty: checkForSemicolon,
-            ExportNamedDeclaration(node) {
-                if (!node.declaration) {
-                    checkForSemicolon(node);
-                }
-            },
-            ExportDefaultDeclaration(node) {
-                if (!/(?:Class|Function)Declaration/.test(node.declaration.type)) {
-                    checkForSemicolon(node);
-                }
-            }
+            ClassProperty: checkForSemicolon
         };
-
     }
-};
+]);

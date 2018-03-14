@@ -34,5 +34,8 @@
     "eslint": "^3.0.0",
     "lodash.clonedeep": "^4.5.0",
     "mocha": "^3.0.0"
+  },
+  "dependencies": {
+    "eslint-rule-composer": "^0.1.0"
   }
 }
