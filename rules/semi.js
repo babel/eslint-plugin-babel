@@ -3,9 +3,18 @@
  * @author Nicholas C. Zakas
  */
 "use strict";
+
+//------------------------------------------------------------------------------
+// Requirements
+//------------------------------------------------------------------------------
+
 const ruleComposer = require("eslint-rule-composer");
 const eslint = require("eslint");
 const semiRule = eslint.linter.getRules().get("semi");
+
+//------------------------------------------------------------------------------
+// Rule Definition
+//------------------------------------------------------------------------------
 
 const filterSemiRule = ruleComposer.filterReports(semiRule, problem => {
     // VariableDeclaraction nodes use a modified checkForSemicolonForVariableDeclaration
