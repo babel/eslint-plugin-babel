@@ -80,6 +80,7 @@ ruleTester.run("no-unused-expressions", rule, {
       "let a = do { (foo + 1) }",
       "let a = do { if (foo) { if (foo.bar) { foo.bar } } }",
       "let a = do { if (foo) { if (foo.bar) { foo.bar } else if (foo.baz) { foo.baz } } }",
+      "let a = do { if (foo) 1; else if (bar) 2; else 3; }",
 
     ],
     invalid: [

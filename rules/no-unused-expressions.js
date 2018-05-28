@@ -26,9 +26,7 @@ function isInDoStatement(node) {
 
   if (node.type === 'DoExpression') return true;
 
-  // this is an `else if`
   if (
-    node.type === 'IfStatement' &&
     node.parent &&
     node.parent.type === 'IfStatement'
   ) {
@@ -46,4 +44,3 @@ module.exports = ruleComposer.filterReports(
   rule,
   (problem, metadata) => !isInDoStatement(problem.node)
 );
-
