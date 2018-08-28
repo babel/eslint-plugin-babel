@@ -33,7 +33,7 @@
     "eslint-rule-composer": "^0.3.0"
   },
   "devDependencies": {
-    "babel-eslint": "^8.2.2",
+    "babel-eslint": "^9.0.0",
     "eslint": "^4.19.1",
     "lodash.clonedeep": "^4.5.0",
     "mocha": "^3.0.0"
