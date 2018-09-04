@@ -74,12 +74,12 @@ ruleTester.run("no-unused-expressions", rule, {
         },
 
         // Babel-specific test cases.
-        "let a = do { if (foo) { foo.bar } }",
-        "let a = do { foo }",
+        "let a = do { if (foo) { foo.bar; } }",
+        "let a = do { foo; }",
         "let a = do { let b = 2; foo; }",
-        "let a = do { (foo + 1) }",
-        "let a = do { if (foo) { if (foo.bar) { foo.bar } } }",
-        "let a = do { if (foo) { if (foo.bar) { foo.bar } else if (foo.baz) { foo.baz } } }",
+        "let a = do { (foo + 1); }",
+        "let a = do { if (foo) { if (foo.bar) { foo.bar; } } }",
+        "let a = do { if (foo) { if (foo.bar) { foo.bar; } else if (foo.baz) { foo.baz; } } }",
         "foo.bar?.();",
 
     ],
