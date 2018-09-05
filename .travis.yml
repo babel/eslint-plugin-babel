@@ -7,3 +7,11 @@ node_js:
   - 6
   - 8
   - 10
+before_script:
+  - 'if [ -n "${ESLINT-}" ]; then npm install --no-save "eslint@${ESLINT}" ; fi'
+script:
+  - npm run test
+env:
+  matrix:
+    - ESLINT=5
+    - ESLINT=4
