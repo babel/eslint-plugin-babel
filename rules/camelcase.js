@@ -137,10 +137,6 @@ module.exports = {
         } else if (node.parent.type === "Property" || node.parent.type === "AssignmentPattern") {
 
           if (node.parent.parent && node.parent.parent.type === "ObjectPattern") {
-            if (node.parent.shorthand && node.parent.value.left && isUnderscored(name)) {
-
-              report(node);
-            }
 
             const assignmentKeyEqualsValue = node.parent.key.name === node.parent.value.name;
 
