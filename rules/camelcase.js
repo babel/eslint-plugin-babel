@@ -47,6 +47,17 @@ module.exports = {
     // contains reported nodes to avoid reporting twice on destructuring with shorthand notation
     const reported = [];
     const ALLOWED_PARENT_TYPES = new Set(["CallExpression", "NewExpression"]);
+    const MEMBER_EXPRESSIONS = ["MemberExpression", "OptionalMemberExpression"];
+
+    /**
+     * Checks if expression is supported member expression.
+     *
+     * @param {string} expression - An expression to check.
+     * @returns {boolean} `true` if the expression type is supported
+     */
+    function isMemberExpression(expression) {
+      return MEMBER_EXPRESSIONS.indexOf(expression) >= 0;
+    }
 
     /**
      * Checks if a string contains an underscore and isn't all upper-case
@@ -110,10 +121,10 @@ module.exports = {
          * private/protected identifiers, strip them
          */
         const name = node.name.replace(/^_+|_+$/g, ""),
-          effectiveParent = (node.parent.type === "MemberExpression") ? node.parent.parent : node.parent;
+          effectiveParent = isMemberExpression(node.parent.type) ? node.parent.parent : node.parent;
 
         // MemberExpressions get special rules
-        if (node.parent.type === "MemberExpression") {
+        if (isMemberExpression(node.parent.type)) {
 
           // "never" check properties
           if (properties === "never") {
@@ -125,7 +136,7 @@ module.exports = {
             report(node);
 
             // Report AssignmentExpressions only if they are the left side of the assignment
-          } else if (effectiveParent.type === "AssignmentExpression" && isUnderscored(name) && (effectiveParent.right.type !== "MemberExpression" || effectiveParent.left.type === "MemberExpression" && effectiveParent.left.property.name === node.name)) {
+          } else if (effectiveParent.type === "AssignmentExpression" && isUnderscored(name) && (!isMemberExpression(effectiveParent.right.type) || isMemberExpression(effectiveParent.left.type) && effectiveParent.left.property.name === node.name)) {
             report(node);
           }
 

@@ -88,6 +88,10 @@ ruleTester.run("camelcase", rule, {
       options: [{ properties: "never" }]
     },
     {
+      code: "var foo = bar?.a_b;",
+      options: [{ properties: "never" }]
+    },
+    {
       code: "obj.foo_bar = function(){};",
       options: [{ properties: "never" }]
     },
