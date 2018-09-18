@@ -87,8 +87,8 @@ module.exports = {
      * @private
      */
     function report(node) {
-      if (reported.indexOf(node) < 0) {
-        reported.push(node);
+      if (reported.indexOf(node.parent) < 0) {
+        reported.push(node.parent);
         context.report({ node, messageId: "notCamelCase", data: { name: node.name } });
       }
     }
