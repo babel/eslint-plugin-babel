@@ -20,6 +20,7 @@ const ruleTester = new RuleTester();
 
 ruleTester.run("camelcase", rule, {
   valid: [
+    // Original test cases.
     "firstName = \"Nicholas\"",
     "FIRST_NAME = \"Nicholas\"",
     "__myPrivateVariable = \"Patrick\"",
@@ -85,10 +86,6 @@ ruleTester.run("camelcase", rule, {
     },
     {
       code: "var obj = {\n a_a: 1 \n};\n obj.a_b = 2;",
-      options: [{ properties: "never" }]
-    },
-    {
-      code: "var foo = bar?.a_b;",
       options: [{ properties: "never" }]
     },
     {
@@ -186,7 +183,13 @@ ruleTester.run("camelcase", rule, {
     {
       code: "function foo({ trailing_ }) {}",
       parserOptions: { ecmaVersion: 6 }
-    }
+    },
+
+    // Babel-specific test cases
+    {
+      code: "var foo = bar?.a_b;",
+      options: [{ properties: "never" }]
+    },
   ],
   invalid: [
     {
