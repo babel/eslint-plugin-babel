@@ -17,6 +17,7 @@ module.exports = {
     'quotes': require('./rules/quotes'),
     'semi': require('./rules/semi'),
     'valid-typeof': require('./rules/valid-typeof'),
+    'space-infix-ops': require('./rules/space-infix-ops'),
   },
   rulesConfig: {
     'array-bracket-spacing': 0,
@@ -34,5 +35,6 @@ module.exports = {
     'quotes': 0,
     'semi': 0,
     'valid-typeof': 0,
+    'space-infix-ops': 0,
   },
 };
