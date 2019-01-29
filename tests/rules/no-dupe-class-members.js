@@ -21,7 +21,7 @@ const RuleTester = require("../RuleTester");
 // Tests
 //------------------------------------------------------------------------------
 
-const ruleTester = new RuleTester({ parserOptions: { ecmaVersion: 6 } });
+const ruleTester = new RuleTester();
 
 ruleTester.run("no-dupe-class-members", rule, {
   valid: [
@@ -34,7 +34,13 @@ ruleTester.run("no-dupe-class-members", rule, {
     "class A { 'foo'() {} 'bar'() {} baz() {} }",
     "class A { *'foo'() {} *'bar'() {} *baz() {} }",
     "class A { get 'foo'() {} get 'bar'() {} get baz() {} }",
-    "class A { 1() {} 2() {} }"
+    "class A { 1() {} 2() {} }",
+    "class A { foo = 1; bar = 1; }",
+    "class A { static foo = 1; foo = 1; }",
+    "class A { foo = 1; } class B { foo = 1; }",
+    "class A { [foo] = 1; foo = 1; }",
+    "class A { foo; bar = 1; }",
+    "class A { foo = () => {}; bar = () => {}; }"
   ],
   invalid: [
     {
@@ -135,6 +141,73 @@ ruleTester.run("no-dupe-class-members", rule, {
           type: "MethodDefinition",
           line: 1,
           column: 29,
+          messageId: "unexpected",
+          data: { name: "foo" }
+        }
+      ]
+    },
+    {
+      code: "class A { foo = 1; foo = 1; }",
+      errors: [
+        {
+          type: "ClassProperty",
+          line: 1,
+          column: 20,
+          messageId: "unexpected",
+          data: { name: "foo" }
+        }
+      ]
+    },
+    {
+      code: "class A { foo = 1; foo = 1; foo = 1; }",
+      errors: [
+        {
+          type: "ClassProperty",
+          line: 1,
+          column: 20,
+          messageId: "unexpected",
+          data: { name: "foo" }
+        },
+        {
+          type: "ClassProperty",
+          line: 1,
+          column: 29,
+          messageId: "unexpected",
+          data: { name: "foo" }
+        }
+      ]
+    },
+    {
+      code: "class A { static foo = 1; static foo = 1; }",
+      errors: [
+        {
+          type: "ClassProperty",
+          line: 1,
+          column: 27,
+          messageId: "unexpected",
+          data: { name: "foo" }
+        }
+      ]
+    },
+    {
+      code: "class A { 'foo' = 1; 'foo' = 1; }",
+      errors: [
+        {
+          type: "ClassProperty",
+          line: 1,
+          column: 22,
+          messageId: "unexpected",
+          data: { name: "foo" }
+        }
+      ]
+    },
+    {
+      code: "class A { foo = () => {}; foo = () => {}; }",
+      errors: [
+        {
+          type: "ClassProperty",
+          line: 1,
+          column: 27,
           messageId: "unexpected",
           data: { name: "foo" }
         }

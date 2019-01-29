@@ -77,6 +77,36 @@ module.exports = {
       }
     }
 
+    /**
+     * Reports the node if its name has been declared already.
+     *
+     * @param {ASTNode} node - A node to get the name.
+     */
+    function checkIfDuplicate(node) {
+      if (node.computed) {
+        return;
+      }
+
+      const name = getName(node.key);
+      const state = getState(name, node.static);
+      let isDuplicate = false;
+
+      if (node.kind === "get") {
+        isDuplicate = state.init || state.get;
+        state.get = true;
+      } else if (node.kind === "set") {
+        isDuplicate = state.init || state.set;
+        state.set = true;
+      } else {
+        isDuplicate = state.init || state.get || state.set;
+        state.init = true;
+      }
+
+      if (isDuplicate) {
+        context.report({ node, messageId: "unexpected", data: { name } });
+      }
+    }
+
     return {
       // Initializes the stack of state of member declarations.
       Program() {
@@ -93,30 +123,12 @@ module.exports = {
         stack.pop();
       },
 
-      // Reports the node if its name has been declared already.
+      ClassProperty(node) {
+        checkIfDuplicate(node);
+      },
+
       MethodDefinition(node) {
-        if (node.computed) {
-          return;
-        }
-
-        const name = getName(node.key);
-        const state = getState(name, node.static);
-        let isDuplicate = false;
-
-        if (node.kind === "get") {
-          isDuplicate = state.init || state.get;
-          state.get = true;
-        } else if (node.kind === "set") {
-          isDuplicate = state.init || state.set;
-          state.set = true;
-        } else {
-          isDuplicate = state.init || state.get || state.set;
-          state.init = true;
-        }
-
-        if (isDuplicate) {
-          context.report({ node, messageId: "unexpected", data: { name } });
-        }
+        checkIfDuplicate(node);
       }
     };
   }
