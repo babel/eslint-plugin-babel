@@ -47,6 +47,7 @@ Each rule corresponds to a core `eslint` rule, and has the same options.
 
 - `babel/new-cap`: Ignores capitalized decorators (`@Decorator`)
 - `babel/camelcase: doesn't complain about optional chaining (`var foo = bar?.a_b;`)
+- `babel/no-dupe-class-members`: Same as the [core rule](https://eslint.org/docs/rules/no-dupe-class-members) but allows for [class properties](https://github.com/tc39/proposal-class-fields)
 - `babel/no-invalid-this`: doesn't fail when inside class properties (`class A { a = this.b; }`)
 - `babel/object-curly-spacing`: doesn't complain about `export x from "mod";` or `export * as x from "mod";` (🛠)
 - `babel/quotes`: doesn't complain about JSX fragment shorthand syntax (`<>foo</>;`)
