@@ -30,6 +30,7 @@ original ones as well!).
   "rules": {
     "babel/new-cap": 1,
     "babel/camelcase": 1,
+    "babel/lines-between-class-members": 1,
     "babel/no-invalid-this": 1,
     "babel/object-curly-spacing": 1,
     "babel/quotes": 1,
@@ -46,7 +47,8 @@ Each rule corresponds to a core `eslint` rule, and has the same options.
 🛠: means it's autofixable with `--fix`.
 
 - `babel/new-cap`: Ignores capitalized decorators (`@Decorator`)
-- `babel/camelcase: doesn't complain about optional chaining (`var foo = bar?.a_b;`)
+- `babel/camelcase`: doesn't complain about optional chaining (`var foo = bar?.a_b;`)
+- `babel/lines-between-class-members`: doesn't complain about public/private class fields (🛠)
 - `babel/no-invalid-this`: doesn't fail when inside class properties (`class A { a = this.b; }`)
 - `babel/object-curly-spacing`: doesn't complain about `export x from "mod";` or `export * as x from "mod";` (🛠)
 - `babel/quotes`: doesn't complain about JSX fragment shorthand syntax (`<>foo</>;`)
