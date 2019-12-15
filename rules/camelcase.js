@@ -27,6 +27,16 @@ module.exports = {
           },
           properties: {
             enum: ["always", "never"]
+          },
+          allow: {
+            type: "array",
+            items: [
+              {
+                type: "string"
+              }
+            ],
+            minItems: 0,
+            uniqueItems: true
           }
         },
         additionalProperties: false
@@ -72,6 +82,18 @@ module.exports = {
     }
 
     /**
+     * Checks if a string match the ignore list
+     * @param {string} name The string to check.
+     * @returns {boolean} if the string is ignored
+     * @private
+     */
+    function isAllowed(name) {
+      return allow.some(
+        entry => name === entry || name.match(new RegExp(entry, "u"))
+      );
+    }
+
+    /**
      * Checks if a parent of a node is an ObjectPattern.
      * @param {ASTNode} node The node to check.
      * @returns {boolean} if the node is inside an ObjectPattern
@@ -107,6 +129,7 @@ module.exports = {
     const options = context.options[0] || {};
     let properties = options.properties || "";
     const ignoreDestructuring = options.ignoreDestructuring || false;
+    const allow = options.allow || [];
 
     if (properties !== "always" && properties !== "never") {
       properties = "always";
@@ -115,6 +138,11 @@ module.exports = {
     return {
 
       Identifier(node) {
+
+        // First, we ignore the node if it match the ignore list
+        if (isAllowed(node.name)) {
+          return;
+        }
 
         /*
          * Leading and trailing underscores are commonly used to flag
