@@ -55,9 +55,23 @@ function isOptionalCallExpression(node) {
   );
 }
 
+/**
+ * @param {ASTNode} node - any node
+ * @return {boolean} whether the expression is a pipeline,
+ *  https://github.com/tc39/proposal-pipeline-operator
+ */
+function isPipeline(node) {
+  return (
+    !!node &&
+    node.type === 'ExpressionStatement' &&
+    node.expression.type === 'BinaryExpression' &&
+    node.expression.operator === '|>'
+  )
+}
+
 module.exports = ruleComposer.filterReports(
   rule,
   (problem, metadata) =>
-    !isInDoStatement(problem.node) && !isOptionalCallExpression(problem.node)
+    !isInDoStatement(problem.node) && !isOptionalCallExpression(problem.node) && !isPipeline(problem.node)
 );
 
