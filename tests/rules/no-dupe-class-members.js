@@ -160,7 +160,7 @@ ruleTester.run("no-dupe-class-members", rule, {
       ]
     },
     {
-      code: "class A { foo = 1; foo = 1; foo = 1; }",
+      code: "class A { foo = 1; foo = 2; foo = 3; }",
       errors: [
         {
           type: "ClassProperty",
@@ -179,7 +179,7 @@ ruleTester.run("no-dupe-class-members", rule, {
       ]
     },
     {
-      code: "class A { static foo = 1; static foo = 1; }",
+      code: "class A { static foo = 1; static foo = 2; }",
       errors: [
         {
           type: "ClassProperty",
