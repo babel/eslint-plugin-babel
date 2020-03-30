@@ -213,6 +213,18 @@ ruleTester.run("no-dupe-class-members", rule, {
           data: { name: "foo" }
         }
       ]
+    },
+    {
+      code: "class A { foo = 42; foo() {} }",
+      errors: [
+        {
+          type: "MethodDefinition",
+          line: 1,
+          column: 21,
+          messageId: "unexpected",
+          data: { name: "foo" }
+        }
+      ]
     }
   ]
 });
