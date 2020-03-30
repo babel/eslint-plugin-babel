@@ -107,6 +107,37 @@ module.exports = {
       }
     }
 
+    /**
+     * Detects if the passed in node is a class property assignment like:
+     *
+     * foo = this.foo.bind(this);
+     *
+     * @param {ASTNode} node
+     * @return {boolean} true if this is a self-bind class property, false otherwise
+     */
+    function isSelfBind(node) {
+      if (node.type !== 'ClassProperty') return false;
+      if (node.computed || node.static) return false;
+
+      let { key, value } = node;
+      if (key.type !== 'Identifier') return false;
+      if (!value || value.type !== 'CallExpression') return false;
+
+      let { callee, arguments: args } = value;
+      if (callee.type !== 'MemberExpression') return false;
+      if (args.length !== 1 || args[0].type !== 'ThisExpression') return false;
+
+      let { object, property } = callee;
+      if (object.type !== 'MemberExpression') return false;
+      if (property.type !== 'Identifier' || property.name !== 'bind') return false;
+
+      let { object: innerObject, property: innerProperty } = object;
+      if (innerObject.type !== 'ThisExpression') return false;
+      if (innerProperty.type !== 'Identifier') return false;
+
+      return key.name === innerProperty.name;
+    }
+
     return {
       // Initializes the stack of state of member declarations.
       Program() {
@@ -124,7 +155,9 @@ module.exports = {
       },
 
       ClassProperty(node) {
-        checkIfDuplicate(node);
+        if (!isSelfBind(node)) {
+          checkIfDuplicate(node);
+        }
       },
 
       MethodDefinition(node) {

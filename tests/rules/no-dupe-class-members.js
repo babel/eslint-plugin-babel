@@ -40,7 +40,8 @@ ruleTester.run("no-dupe-class-members", rule, {
     "class A { foo = 1; } class B { foo = 1; }",
     "class A { [foo] = 1; foo = 1; }",
     "class A { foo; bar = 1; }",
-    "class A { foo = () => {}; bar = () => {}; }"
+    "class A { foo = () => {}; bar = () => {}; }",
+    "class A { foo = this.foo.bind(this); foo() {} }",
   ],
   invalid: [
     {
