@@ -101,12 +101,14 @@ ruleTester.run("semi", rule, {
 
         // babel
         "class Foo { bar = 'example'; }",
+        "class Foo { #bar = 'example'; }",
         "class Foo { static bar = 'example'; }",
         { code: "async function foo() { for await (let thing of {}) { console.log(thing); } }", parserOptions: { ecmaVersion: 6 } },
         { code: "class Foo { bar = () => {}; }", options: ["always", { omitLastInOneLineBlock: true }] },
 
         // babel, "never"
         { code: "class Foo { bar = 'example' }", options: ["never"] },
+        { code: "class Foo { #bar = 'example' }", options: ["never"] },
         { code: "class Foo { static bar = 'example' }", options: ["never"] },
         { code: "class Foo { bar = () => {} }", options: ["never"] },
     ],
@@ -185,6 +187,7 @@ ruleTester.run("semi", rule, {
 
         // babel
         { code: "class Foo { bar = 'example' }", errors: [{ message: "Missing semicolon." }] },
+        { code: "class Foo { #bar = 'example' }", errors: [{ message: "Missing semicolon." }] },
         { code: "class Foo { static bar = 'example' }", errors: [{ message: "Missing semicolon." }] },
         {
             code: "class Foo { bar = () => {} }",
@@ -194,6 +197,7 @@ ruleTester.run("semi", rule, {
 
         // babel, "never"
         { code: "class Foo { bar = 'example'; }", options: ["never"], errors: [{ message: "Extra semicolon." }] },
+        { code: "class Foo { #bar = 'example'; }", options: ["never"], errors: [{ message: "Extra semicolon." }] },
         { code: "class Foo { static bar = 'example'; }", options: ["never"], errors: [{ message: "Extra semicolon." }] },
         {
             code: "class Foo { bar = () => {}; }",
