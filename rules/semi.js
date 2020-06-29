@@ -70,7 +70,7 @@ const report = (context, node, missing) => {
 const semiRuleWithClassProperty = ruleComposer.joinReports([
     semiRule,
     context => ({
-        ClassProperty(node) {
+        "ClassProperty, ClassPrivateProperty"(node) {
             const options = context.options[1];
             const exceptOneLine = options && options.omitLastInOneLineBlock === true;
 
