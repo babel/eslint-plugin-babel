@@ -1,5 +1,7 @@
 # eslint-plugin-babel
 
+## NOTE: eslint-plugin-babel is now `@babel/eslint-plugin` and has moved into the [Babel monorepo](https://github.com/babel/babel/tree/main/eslint/babel-eslint-plugin).
+
 An `eslint` plugin companion to `babel-eslint`. `babel-eslint` does a great job at adapting `eslint`
 for use with Babel, but it can't change the built in rules to support experimental features.
 `eslint-plugin-babel` re-implements problematic rules so they do not give false positives or negatives.
